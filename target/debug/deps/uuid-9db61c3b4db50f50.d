@@ -1,0 +1,13 @@
+C:\Users\rgonn\Desktop\In sviluppo\keychron-app\target\debug\deps\uuid-9db61c3b4db50f50.d: C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\lib.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\macros.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\builder.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\error.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\non_nil.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\parser.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\fmt.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\timestamp.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\external.rs
+
+C:\Users\rgonn\Desktop\In sviluppo\keychron-app\target\debug\deps\libuuid-9db61c3b4db50f50.rmeta: C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\lib.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\macros.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\builder.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\error.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\non_nil.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\parser.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\fmt.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\timestamp.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\external.rs
+
+C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\lib.rs:
+C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\macros.rs:
+C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\builder.rs:
+C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\error.rs:
+C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\non_nil.rs:
+C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\parser.rs:
+C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\fmt.rs:
+C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\timestamp.rs:
+C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\uuid-1.27.0\src\external.rs:

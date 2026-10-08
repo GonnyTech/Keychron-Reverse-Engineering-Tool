@@ -1,0 +1,10 @@
+C:\Users\rgonn\Desktop\In sviluppo\keychron-app\target\debug\deps\windows_sys-4e8f93fb3d76f375.d: C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.61.2\src\lib.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.61.2\src\core\mod.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.61.2\src\core\literals.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.61.2\src\Windows/mod.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.61.2\src\Windows\Win32\mod.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.61.2\src\Windows\Win32\Foundation\mod.rs
+
+C:\Users\rgonn\Desktop\In sviluppo\keychron-app\target\debug\deps\libwindows_sys-4e8f93fb3d76f375.rmeta: C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.61.2\src\lib.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.61.2\src\core\mod.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.61.2\src\core\literals.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.61.2\src\Windows/mod.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.61.2\src\Windows\Win32\mod.rs C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.61.2\src\Windows\Win32\Foundation\mod.rs
+
+C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.61.2\src\lib.rs:
+C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.61.2\src\core\mod.rs:
+C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.61.2\src\core\literals.rs:
+C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.61.2\src\Windows/mod.rs:
+C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.61.2\src\Windows\Win32\mod.rs:
+C:\Users\rgonn\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\windows-sys-0.61.2\src\Windows\Win32\Foundation\mod.rs:
