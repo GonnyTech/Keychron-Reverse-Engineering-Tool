@@ -49,3 +49,9 @@ Make sure you have [Rust and Cargo](https://www.rust-lang.org/) installed. Conne
 git clone [https://github.com/GonnyTech/Keychron-Reverse-Engineering-Tool.git](https://github.com/GonnyTech/Keychron-Reverse-Engineering-Tool.git)
 cd Keychron-Reverse-Engineering-Tool
 cargo run
+```
+
+---
+
+## 🤝 Contributions & Continuation
+Feel free to fork this repository, open issues, or test it on other non-QMK Keychron models. If you find a way to unlock the firmware telemetry via BLE or USB, pull requests are more than welcome!
