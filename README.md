@@ -1,6 +1,6 @@
 # Keychron K10 USB/HID Reverse Engineering Tool (Rust)
 
-An experimental, low-level Rust utility designed to inspect, map, and communicate with **Keychron K10** keyboards (non-QMK/VIA version, standard Bluetooth/Wireless model) via USB HID on Windows.
+An experimental, low-level Rust utility designed to inspect, map, and communicate with **Keychron K10** keyboards (non-QMK/VIA version, standard Bluetooth/Wireless model) via USB HID on Windows, with ongoing exploration shifting towards Linux and Bluetooth (BLE).
 
 Created as a personal reverse engineering challenge to explore device interfaces, Windows driver limitations, and firmware telemetry.
 
@@ -24,6 +24,16 @@ If you are poking around the non-QMK Keychron K10 firmware, here is what our mul
 
 ---
 
+## What Next?
+
+However, that doesn't mean it's a dead end! 
+
+While the wired USB interface proves to be a telemetry blackout on non-QMK models, community documentation for older K-series boards (like the K2 and K6) indicates that battery reporting and device states are handled through the **Bluetooth (BLE)** stack rather than USB (which makes sense, considering that the battery voltage information is useful only in Bluetooth Mode). 
+
+The current development phase is shifting to **Linux (Fedora) and BlueZ / D-Bus integration**, utilizing Rust (`zbus`) to directly query the `org.bluez.Battery1` interface when connected wirelessly.
+
+---
+
 ## 🛠️ Code Structure
 
 The repository includes:
@@ -36,9 +46,6 @@ The repository includes:
 Make sure you have [Rust and Cargo](https://www.rust-lang.org/) installed. Connect your keyboard via a USB cable and ensure the physical switch is set to **Cable**.
 
 ```bash
-git clone [https://github.com/YOUR_USERNAME/keychron-usb-tool.git](https://github.com/YOUR_USERNAME/keychron-usb-tool.git)
-cd keychron-usb-tool
+git clone [https://github.com/GonnyTech/Keychron-Reverse-Engineering-Tool.git](https://github.com/GonnyTech/Keychron-Reverse-Engineering-Tool.git)
+cd Keychron-Reverse-Engineering-Tool
 cargo run
-```
-# 🤝 Contributions & Continuation
-Feel free to fork this repository, open issues, or test it on other non-QMK Keychron models. If you find a way to unlock the firmware telemetry, pull requests are more than welcome!
