@@ -30,7 +30,7 @@ However, that doesn't mean it's a dead end!
 
 While the wired USB interface proves to be a telemetry blackout on non-QMK models, community documentation for older K-series boards (like the K2 and K6) indicates that battery reporting and device states are handled through the **Bluetooth (BLE)** stack rather than USB (which makes sense, considering that the battery voltage information is useful only in Bluetooth Mode). 
 
-The current development phase is shifting to **Linux (Fedora) and BlueZ / D-Bus integration**, utilizing Rust (`zbus`) to directly query the `org.bluez.Battery1` interface when connected wirelessly.
+Since Windows hides that information behind closed system protocols, the current development phase is shifting to **Linux (Fedora) and BlueZ / D-Bus integration**, utilizing Rust (`zbus`) to directly query the `org.bluez.Battery1` interface when connected wirelessly.
 
 ---
 
