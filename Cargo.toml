@@ -1,7 +1,8 @@
 [package]
-name = "keychron_usb_tool"
+name = "keychron_ble_battery"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-hidapi = "2.6"
+zbus = "4"
+tokio = { version = "1", features = ["full"]}
