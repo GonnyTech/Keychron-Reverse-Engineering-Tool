@@ -11,8 +11,8 @@ Created as a reverse engineering challenge to overcome Windows driver restrictio
 If you are poking around the firmware of a standard, non-QMK Keychron keyboard (like the original K10 with VID/PID `0x05ac:0x024f`), here is what multi-interface sniffing and polling tests reveal:
 
 1. **The USB Dead End:**
-   - Standard typing interfaces (`MI_00`, `MI_01`) return `Access is denied (0x00000005)` because the OS input driver locks them for keystrokes.
-   - The custom vendor-defined interface (`Usage Page: 65535` / `0xFF00`) yields `Incorrect function (0x00000001)` when attempting raw feature report polling or output writes.
+   - Standard typing interfaces (`MI_00`, `MI_01`) return `Access is denied` because the OS input driver locks them for keystrokes.
+   - The custom vendor-defined interface (`Usage Page: 65535` / `0xFF00`) yields `Incorrect function` when attempting raw feature report polling or output writes.
    - **Conclusion:** On standard non-QMK models, the USB firmware does not implement host-side telemetry commands or write routines. Over a wired cable, it acts strictly as a standard HID device.
 
 2. **The BLE & D-Bus Breakthrough:**
@@ -35,10 +35,10 @@ If you are poking around the firmware of a standard, non-QMK Keychron keyboard (
 ### Prerequisites
 - **Linux** (Tested on Fedora)
 - **Rust & Cargo** ([rustup.rs](https://www.rust-lang.org/))
-- Keyboard connected via **Bluetooth** (Ensure `Experimental = true` is set under `[General]` in `/etc/bluetooth/main.conf` if necessary).
+- Keyboard connected via **Bluetooth** (Ensure `Experimental = true` is set under `[General]` in `/etc/bluetooth/main.conf`).
 
 ### Build from Source
-Clone the repository, compile the project, and build the optimized binary:
+Clone the repository, compile the project, and build the optimized release binary:
 
 ```bash
 git clone [https://github.com/GonnyTech/Keychron-Reverse-Engineering-Tool.git](https://github.com/GonnyTech/Keychron-Reverse-Engineering-Tool.git)
@@ -84,38 +84,43 @@ cargo run --release -- --waybar
 
 ## ⚙️ Hyprland & Waybar Integration
 
-To have your Keychron battery status displayed directly on your Waybar status bar:
+To have your Keychron battery status displayed directly on your Waybar status bar with interactive click-to-open GUI support:
 
-1. Copy your compiled binary to your path (e.g., `~/.local/bin/keychron-battery`).
-2. Add a custom module to your `waybar/config.jsonc`:
+### 1. Configure Waybar (`config.jsonc` or `config_bottom.jsonc`)
+
+Add the custom module inside your modules list (e.g., `modules-right`) and configure its execution path, interval, and click action:
 
 ```jsonc
 "custom/keychron": {
-    "exec": "/home/YOUR_USERNAME/.local/bin/keychron-battery --waybar",
+    "exec": "/home/YOUR_USERNAME/Keychron-Reverse-Engineering-Tool/target/release/keychron_ble_battery --waybar",
     "return-type": "json",
     "interval": 30,
     "format": "⌨️  {}",
     "tooltip": true,
-    "on-click": "/home/YOUR_USERNAME/.local/bin/keychron-battery --gui"
+    "on-click": "/home/YOUR_USERNAME/Keychron-Reverse-Engineering-Tool/target/release/keychron_ble_battery --gui"
 }
 
 ```
 
-3. Add matching styling rules in `waybar/style.css`:
+### 2. Style your Waybar (`style.css`)
+
+Ensure the module matches your theme's typography and supports critical battery warning animations:
 
 ```css
+/* Include the module in your main font/padding rules */
 #custom-keychron {
-    background-color: #1e1e2e;
-    color: #cdd6f4;
-    padding: 0 10px;
-    margin: 4px 2px;
-    border-radius: 6px;
+    padding: 1px 5px 0 5px;
+    color: #FFFFFF;
 }
 
-#custom-keychron.critical {
-    background-color: #f38ba8;
-    color: #11111b;
-}
+#custom-keychron.critical:not(.charging) { 
+    color: #f53c3c; 
+    animation-name: blink; 
+    animation-duration: 1s; 
+    animation-timing-function: linear; 
+    animation-iteration-count: infinite; 
+    animation-direction: alternate; 
+} 
 
 ```
 
@@ -124,3 +129,6 @@ To have your Keychron battery status displayed directly on your Waybar status ba
 ## 🤝 Contributions
 
 Feel free to fork, open issues, or submit pull requests if you want to expand support to other classic Keychron models or add new features!
+Questo file è pronto per essere salvato come `README.md` nella root del tuo progetto ed è perfetto per descrivere ogni singolo aspetto tecnico e pratico del lavoro svolto!
+
+```
