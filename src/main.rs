@@ -1,166 +1,116 @@
-use zbus::{Connection, proxy};
 use std::error::Error;
-use clap::Parser;
-use serde::Serialize;
-use iced::widget::{button, column, text, container, Space};
-use iced::{Element, Length, Sandbox, Settings};
-
-#[proxy(
-    interface = "org.freedesktop.UPower.Device",
-    assume_defaults = true
-)]
-trait UPowerDevice {
-    #[zbus(property)]
-    fn percentage(&self) -> zbus::Result<f64>;
-
-    #[zbus(property)]
-    fn model(&self) -> zbus::Result<String>;
-
-    #[zbus(property)]
-    fn state(&self) -> zbus::Result<u32>;
-}
-
-#[derive(Parser, Debug)]
-#[command(author, version, about)]
-struct Args {
-    /// Avvia la GUI grafica per Hyprland
-    #[arg(short, long)]
-    gui: bool,
-
-    /// Esporta un file JSON formattato per Waybar nella cartella corrente
-    #[arg(short, long)]
-    waybar: bool,
-}
-
-#[derive(Serialize)]
-struct WaybarOutput {
-    text: String,
-    tooltip: String,
-    percentage: u8,
-    class: String,
-}
+use std::time::{Duration, Instant};
+use tokio::time::sleep;
+use zbus::Connection;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    let args = Args::parse();
-    let connection = Connection::system().await?;
-    let path = "/org/freedesktop/UPower/devices/battery_hid_dco2co26o35o96o4d_battery";
+    let args: Vec<String> = std::env::args().collect();
+    let waybar_mode = args.iter().any(|arg| arg == "--waybar");
+    let watch_mode = args.iter().any(|arg| arg == "--watch");
+    let gui_mode = args.iter().any(|arg| arg == "--gui");
 
-    let device_proxy = UPowerDeviceProxy::builder(&connection)
-        .path(path)?
-        .destination("org.freedesktop.UPower")?
-        .build()
-        .await?;
-
-    let level = device_proxy.percentage().await.unwrap_or(0.0) as u8;
-    let state = device_proxy.state().await.unwrap_or(0);
-    let model = device_proxy.model().await.unwrap_or_else(|_| "Keychron K10".to_string());
-
-    let state_str = match state {
-        1 => "In carica ⚡",
-        2 => "In scarica",
-        4 => "Carica completa 🔌",
-        _ => "Sconosciuto",
-    };
-
-    // Modalità Waybar JSON
-    if args.waybar {
-        let waybar_data = WaybarOutput {
-            text: format!("{}%", level),
-            tooltip: format!("{} - {} ({})", model, state_str, level),
-            percentage: level,
-            class: if level < 20 { "critical".into() } else { "normal".into() },
-        };
-        println!("{}", serde_json::to_string(&waybar_data)?);
+    if gui_mode {
+        println!("Avvio GUI...");
         return Ok(());
     }
 
-    // Modalità GUI Iced per Hyprland
-    if args.gui {
-        // Avviamo la nostra interfaccia grafica
-        KeychronGuiApp::run(Settings::default())?;
-        return Ok(());
-    }
+    if watch_mode {
+        let mut last_percentage: u8 = 0;
+        let mut last_update = Instant::now();
 
-    // Modalità CLI classica di fallback
-    println!("🔋 Dispositivo: {}", model);
-    println!("   Livello: {}%", level);
-    println!("   Stato: {}", state_str);
+        loop {
+            match read_upower_battery().await {
+                Ok(battery) => {
+                    last_percentage = battery;
+                    last_update = Instant::now();
+                    print_output(last_percentage, Some(last_update), waybar_mode);
+                }
+                Err(_) => {
+                    if last_percentage > 0 {
+                        print_output(last_percentage, Some(last_update), waybar_mode);
+                    } else {
+                        print_error(waybar_mode);
+                    }
+                }
+            }
+            sleep(Duration::from_secs(30)).await;
+        }
+    } else {
+        match read_upower_battery().await {
+            Ok(battery) => print_output(battery, Some(Instant::now()), waybar_mode),
+            Err(_) => print_error(waybar_mode),
+        }
+    }
 
     Ok(())
 }
 
-// --- APPLICAZIONE GUI (ICED) ---
-struct KeychronGuiApp {
-    battery_level: u8,
-    status: String,
-}
+/// Trova dinamicamente il path UPower della tastiera ed estrae la percentuale
+async fn read_upower_battery() -> Result<u8, Box<dyn Error>> {
+    let connection = Connection::system().await?;
+    
+    let proxy = zbus::Proxy::new(
+        &connection,
+        "org.freedesktop.UPower",
+        "/org/freedesktop/UPower",
+        "org.freedesktop.UPower",
+    ).await?;
 
-#[derive(Debug, Clone)]
-enum Message {
-    Refresh,
-    ExportWaybarJson,
-}
+    let devices: Vec<zbus::zvariant::OwnedObjectPath> = proxy.call("EnumerateDevices", &()).await?;
 
-impl Sandbox for KeychronGuiApp {
-    type Message = Message;
+    for dev_path in devices {
+        let path_str = dev_path.as_str();
+        if path_str.contains("hid") && (path_str.contains("ee_74_0e") || path_str.contains("wearable") || path_str.contains("battery")) {
+            let dev_proxy = zbus::Proxy::new(
+                &connection,
+                "org.freedesktop.UPower",
+                path_str,
+                "org.freedesktop.UPower.Device",
+            ).await?;
 
-    fn new() -> Self {
-        Self {
-            battery_level: 85, // Valore indicativo iniziale prima del fetch sincrono/asincrono
-            status: "Pronto".into(),
+            let percentage_val: zbus::zvariant::Value = dev_proxy.get_property("Percentage").await?;
+            
+            let percentage = match percentage_val {
+                zbus::zvariant::Value::F64(v) => v as u8,
+                zbus::zvariant::Value::U32(v) => v as u8,
+                zbus::zvariant::Value::I32(v) => v as u8,
+                _ => continue,
+            };
+
+            return Ok(percentage);
         }
     }
 
-    fn title(&self) -> String {
-        "Keychron Battery Monitor".into()
+    Err("Dispositivo UPower della tastiera non trovato".into())
+}
+
+fn print_output(battery: u8, last_update: Option<Instant>, waybar_mode: bool) {
+    let elapsed = last_update.map(|t| t.elapsed()).unwrap_or(Duration::from_secs(0));
+    
+    let staleness_str = if elapsed.as_secs() < 60 {
+        "ora".to_string()
+    } else if elapsed.as_secs() < 3600 {
+        format!("{}m fa", elapsed.as_secs() / 60)
+    } else {
+        format!("{}h fa", elapsed.as_secs() / 3600)
+    };
+
+    if waybar_mode {
+        let status_class = if battery <= 15 { "critical" } else { "normal" };
+        println!(
+            "{{\"text\": \"{}%\", \"percentage\": {}, \"class\": [\"{}\"], \"tooltip\": \"Keychron K10: {}% (Aggiornato: {})\"}}",
+            battery, battery, status_class, battery, staleness_str
+        );
+    } else {
+        println!("Keychron Battery: {}% (Aggiornato {})", battery, staleness_str);
     }
+}
 
-    fn update(&mut self, message: Message) {
-        match message {
-            Message::Refresh => {
-                self.status = "Aggiornato!".into();
-            }
-            Message::ExportWaybarJson => {
-                let waybar_data = WaybarOutput {
-                    text: format!("{}%", self.battery_level),
-                    tooltip: "Keychron K10 Battery".into(),
-                    percentage: self.battery_level,
-                    class: "normal".into(),
-                };
-                if let Ok(json) = serde_json::to_string(&waybar_data) {
-                    let _ = std::fs::write("keychron_waybar.json", json);
-                    self.status = "JSON salvato in keychron_waybar.json!".into();
-                }
-            }
-        }
-    }
-
-    fn view(&self) -> Element<'_, Message> {
-        let title = text("Keychron K10 Battery").size(24);
-        let level_text = text(format!("{}%", self.battery_level)).size(48);
-        let status_text = text(&self.status).size(14);
-
-        let btn_refresh = button(text("Aggiorna").size(14)).on_press(Message::Refresh);
-        let btn_json = button(text("Esporta JSON Waybar").size(14)).on_press(Message::ExportWaybarJson);
-
-        let content = column![
-            title,
-            Space::with_height(20),
-            level_text,
-            status_text,
-            Space::with_height(30),
-            btn_refresh,
-            btn_json,
-        ]
-        .padding(20)
-        .align_items(iced::Alignment::Center);
-
-        container(content)
-            .width(Length::Fill)
-            .height(Length::Fill)
-            .center_x()
-            .center_y()
-            .into()
+fn print_error(waybar_mode: bool) {
+    if waybar_mode {
+        println!("{{\"text\": \"N/A\", \"class\": [\"critical\"], \"tooltip\": \"Keychron Disconnected\"}}");
+    } else {
+        eprintln!("Errore nel recupero della batteria.");
     }
 }
