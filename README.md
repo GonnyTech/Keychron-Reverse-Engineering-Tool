@@ -129,4 +129,3 @@ Ensure the module matches your theme's typography and supports critical battery 
 ## 🤝 Contributions
 
 Feel free to fork, open issues, or submit pull requests if you want to expand support to other classic Keychron models or add new features!
-Questo file è pronto per essere salvato come `README.md` nella root del tuo progetto ed è perfetto per descrivere ogni singolo aspetto tecnico e pratico del lavoro svolto!
