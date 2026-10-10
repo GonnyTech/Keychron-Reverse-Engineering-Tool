@@ -2,7 +2,7 @@
 
 An open-source, high-performance Rust utility designed to retrieve, monitor, and display battery telemetry for **non-QMK Keychron keyboards** (such as the K10, K2, and older classic K-series models) running on Linux (Fedora/Wayland/Hyprland environments via Bluetooth BLE).
 
-Created as a reverse engineering challenge to overcome Windows driver restrictions, map device limitations, and bring native wireless battery monitoring to Linux.
+Created as a reverse engineering challenge to overcome Windows driver restrictions, map device limitations, the project ended up bringing native wireless battery monitoring to Linux.
 
 ---
 
